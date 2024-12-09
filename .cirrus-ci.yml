@@ -1,10 +1,12 @@
 persistent_worker:
   container:
-    image: alp1n3/local 
+    image: alp1n3/local
     cpu: 24
     memory: 128G
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/persistent-cache:/tmp/cache:ro
   task:
-    script: []  # No override of the entry point
+    script:
+      - echo "Hello from the container!"
+      - docker run  alp1n3/local
