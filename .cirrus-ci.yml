@@ -1,7 +1,7 @@
 task:
 persistent_worker:
   container:
-    image: alp1n3/local  # Your custom Docker image
+    image: nmlm99/local  # Your custom Docker image
   python_cache:
     folder: /root/.cache/pip  # Cache pip packages
     fingerprint_script: cat requirements.txt  # Use requirements.txt to fingerprint the cache
