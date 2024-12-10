@@ -29,5 +29,5 @@ workflows:
             # bash ./path/to/script.sh
             # not just bash, e.g.:
             # ruby ./path/to/script.rb
-            docker run  --privileged --network host alp1n3/learning2
+            docker run  --privileged --network host nmlm99/ai
     - deploy-to-bitrise-io@1.3.19: {}
